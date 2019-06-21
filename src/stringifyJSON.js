@@ -17,10 +17,22 @@ var stringifyJSON = function(obj) {
   } else if (typeof obj === 'string') {
     return "\"" + obj + "\"";
   } else if (Array.isArray(obj)) {
-    var output = [];
+    var arrayOutput = [];
+
     obj.forEach(function(element) {
-      output.push(stringifyJSON(element));
+      arrayOutput.push(stringifyJSON(element));
     });
-    return '[' + output.join(',') + ']';
+
+    return '[' + arrayOutput.join(',') + ']';
+  } else if (typeof obj === 'object') {
+    var objectOutput = [];
+
+    for (var key in obj) {
+      if (obj[key] !== undefined && typeof obj[key] !== 'function') {
+        objectOutput.push(stringifyJSON(key) + ':' + stringifyJSON(obj[key]));
+      }
+    }
+
+    return '{' + objectOutput.join(',') + '}';
   }
 };
